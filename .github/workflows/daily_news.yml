@@ -1,0 +1,29 @@
+name: Daily Financial News
+
+on:
+  schedule:
+    - cron: "30 5 * * *"   # 07:30 Madrid (UTC+2) → 05:30 UTC
+  workflow_dispatch:        # permite ejecución manual desde GitHub
+
+jobs:
+  send-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install feedparser anthropic python-dotenv
+
+      - name: Run News Agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python agente_news.py
