@@ -1,21 +1,21 @@
 {
   "temas": {
-    "central banks and monetary policy": 2,
-    "interest rates and bonds": 1,
+    "central banks and monetary policy": 3,
+    "interest rates and bonds": 2,
     "stock markets (equities)": 3,
-    "european markets": 2,
+    "european markets": 1,
     "american markets": 3,
     "latin america / mexico": 2,
-    "corporate earnings": 2,
+    "corporate earnings": 1,
     "mergers and acquisitions": 1,
     "fintech and financial technology": 2,
-    "financial regulation": 1,
+    "financial regulation": -1,
     "commodities and energy": 1,
-    "geopolitics and the global economy": 3,
-    "currencies and forex": 1,
-    "cryptocurrencies": -1
+    "geopolitics and the global economy": 2,
+    "currencies and forex": 2,
+    "cryptocurrencies": 0
   },
-  "temas_especificos": "Equity and Geopolitics",
-  "relevancia_general": 3,
-  "ultima_actualizacion": "2026-05-30T22:16:21.226889"
+  "temas_especificos": "Geopolitical and Technology",
+  "relevancia_general": 4,
+  "ultima_actualizacion": "2026-05-30T20:53:16.659303"
 }
