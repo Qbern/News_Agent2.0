@@ -1,6 +1,7 @@
 import os
 import re
 import smtplib
+import json
 import feedparser
 import anthropic
 from pathlib import Path
@@ -40,15 +41,36 @@ def recolectar_titulares():
     return titulos
 
 
+def cargar_preferencias() -> str:
+    """Lee preferencias.json y construye un párrafo de personalización para el prompt."""
+    ruta = Path(__file__).parent / "preferencias.json"
+    if not ruta.exists():
+        return ""
+    prefs = json.loads(ruta.read_text(encoding="utf-8"))
+    temas = prefs.get("temas", {})
+    priorizar = [t for t, s in temas.items() if s >= 2]
+    evitar = [t for t, s in temas.items() if s < 0]
+    especificos = prefs.get("temas_especificos", "").strip()
+    parrafo = "\nUser preferences to consider when selecting news:\n"
+    if priorizar:
+        parrafo += f"- Prioritize topics: {', '.join(priorizar)}\n"
+    if evitar:
+        parrafo += f"- Avoid topics: {', '.join(evitar)}\n"
+    if especificos:
+        parrafo += f"- Specific interests: {especificos}\n"
+    return parrafo
+
+
 def analizar_con_claude(titulos):
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
     noticias_texto = "\n".join(f"{i+1}. {t}" for i, t in enumerate(titulos))
 
+    preferencias = cargar_preferencias()
     prompt = f"""You are a senior financial analyst. I am providing you with a list of headlines from various sources (Reuters Business, Yahoo Finance, Expansión México, and Investing España) right below. You must analyze the entire list provided, regardless of the source, and do not filter by source.
 
 {noticias_texto}
-
+{preferencias}
 Your task:
 1. Select the 8 most relevant news for a finance professional interested in global markets, political situations, the economy, and stock markets.
 2. For each selected news item, write a summary of exactly 2 sentences: the first explains the fact, the second explains its financial implication.
