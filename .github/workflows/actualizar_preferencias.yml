@@ -1,0 +1,43 @@
+name: Actualizar Preferencias
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # 23:00 Madrid (UTC+2 verano) → 21:00 UTC
+  workflow_dispatch:        # permite ejecución manual desde GitHub
+
+permissions:
+  contents: write           # necesario para hacer commit y push
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install gspread google-auth python-dotenv
+
+      - name: Write Google credentials file
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+        run: echo "$GOOGLE_CREDENTIALS" > google_credentials.json
+
+      - name: Run script
+        run: python actualizar_preferencias.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add preferencias.json ultimo_proceso.json
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto: actualiza preferencias desde Google Form"
+            git push
+          fi
