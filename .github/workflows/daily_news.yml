@@ -1,9 +1,7 @@
 name: Daily Financial News
 
 on:
-  schedule:
-    - cron: "30 5 * * *"   # 07:30 Madrid (UTC+2) → 05:30 UTC
-  workflow_dispatch:        # permite ejecución manual desde GitHub
+  workflow_dispatch:    # permite ejecución manual desde GitHub
 
 jobs:
   send-news:
