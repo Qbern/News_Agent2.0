@@ -117,7 +117,10 @@ def enviar_email(texto_analisis):
     <hr>
     <p>{texto_a_html(texto_analisis)}</p>
     <hr>
-    <p style="font-size: 11px; color: #888;">Generado automáticamente por News Agent</p>
+    <p>📋 <strong>¿Qué temas te interesaron hoy?</strong> — 
+    <a href="https://forms.gle/rQMuWDbyzWAzkCUZ8" target="_blank">Responder en 20 segundos →</a></p>
+    <hr>
+    <p style="font-size: 11px; color: #888;">Generado automáticamente gracias a News Agent</p>
   </body>
 </html>
 """
